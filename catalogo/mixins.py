@@ -10,6 +10,7 @@ class CodigoAutomaticoModel(models.Model):
         max_length=100,
         blank=True,
         editable=False,
+        unique=True,
     )
 
     class Meta:

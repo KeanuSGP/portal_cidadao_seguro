@@ -27,7 +27,7 @@ WITH solicitacoes (
         '{"profundidade_aproximada":20,"risco_acidentes":"Sim","descricao_complementar":"Buraco dificulta a passagem de veículos."}',
         1, 'RECEBIDA',
         'Rua da Assembleia', '100', '',
-        'Centro', '20011-000',
+        'Centro', '20011000',
         'Próximo ao cruzamento',
         -22.9044, -43.1760
     ),
@@ -40,7 +40,7 @@ WITH solicitacoes (
         '{"tipo_dano":"Piso quebrado","interdita_passagem":"Parcialmente","descricao_complementar":"Há dificuldade para circulação de cadeirantes."}',
         1, 'EM_ANALISE',
         'Rua Voluntários da Pátria', '250', '',
-        'Botafogo', '22270-010',
+        'Botafogo', '22270010',
         'Próximo à estação de metrô',
         -22.9519, -43.1822
     ),
@@ -53,7 +53,7 @@ WITH solicitacoes (
         '{"tipo_problema":"Banco quebrado","descricao_complementar":"Uma das partes do assento está solta."}',
         1, 'EM_ATENDIMENTO',
         'Rua Jardim Botânico', '500', '',
-        'Jardim Botânico', '22461-000',
+        'Jardim Botânico', '22461000',
         'Praça próxima ao endereço',
         -22.9658, -43.2170
     ),
@@ -66,7 +66,7 @@ WITH solicitacoes (
         '{"numero_poste":"RJ-1045","quantidade_lampadas":1,"periodo_problema":"Durante toda a noite"}',
         1, 'PENDENTE',
         'Rua Conde de Bonfim', '300', '',
-        'Tijuca', '20520-050',
+        'Tijuca', '20520050',
         'Em frente ao comércio',
         -22.9245, -43.2351
     ),
@@ -79,7 +79,7 @@ WITH solicitacoes (
         '{"data_prevista":"2026-11-03","tipo_residuo":"Resíduo domiciliar","descricao_complementar":"Os resíduos continuam acumulados na calçada."}',
         1, 'CONCLUIDA',
         'Rua do Senado', '80', '',
-        'Centro', '20231-005',
+        'Centro', '20231005',
         'Próximo ao número 80',
         -22.9097, -43.1892
     ),
@@ -92,7 +92,7 @@ WITH solicitacoes (
         '{"tipo_entulho":"Resíduos de construção","quantidade_aproximada":"Grande"}',
         1, 'RECEBIDA',
         'Estrada do Mendanha', '1200', '',
-        'Campo Grande', '23087-283',
+        'Campo Grande', '23087283',
         'Próximo à entrada do bairro',
         -22.9035, -43.5580
     ),
@@ -105,7 +105,7 @@ WITH solicitacoes (
         '{"motivo_poda":"Galhos próximos à rede elétrica","altura_aproximada":8}',
         1, 'EM_ANALISE',
         'Rua São Clemente', '150', '',
-        'Botafogo', '22260-000',
+        'Botafogo', '22260000',
         'Próximo à esquina',
         -22.9495, -43.1880
     ),
@@ -118,7 +118,7 @@ WITH solicitacoes (
         '{"tipo_placa":"Advertência","problema":"Placa danificada"}',
         1, 'CANCELADA',
         'Avenida Presidente Vargas', '500', '',
-        'Centro', '20071-004',
+        'Centro', '20071004',
         'Próximo ao cruzamento',
         -22.9028, -43.1870
     ),
@@ -131,7 +131,7 @@ WITH solicitacoes (
         '{"tipo_local":"Cruzamento","situacao":"Totalmente desligado"}',
         1, 'EM_ATENDIMENTO',
         'Avenida Maracanã', '900', '',
-        'Maracanã', '20271-111',
+        'Maracanã', '20271111',
         'Cruzamento com rua lateral',
         -22.9128, -43.2300
     ),
@@ -144,7 +144,7 @@ WITH solicitacoes (
         '{"nome_unidade":"Unidade de Saúde Teste","tipo_problema":"Problema hidráulico","descricao_complementar":"Vazamento próximo ao banheiro."}',
         1, 'RECEBIDA',
         'Rua Cesário de Melo', '3000', '',
-        'Campo Grande', '23050-102',
+        'Campo Grande', '23050102',
         'Próximo à unidade de saúde',
         -22.9010, -43.5600
     )
@@ -171,7 +171,7 @@ INSERT INTO zeladoria_solicitacaozeladoria (
     atualizado_em
 )
 SELECT
-    s.protocolo,
+    s.protocolo::uuid,
     u.id,
     serv.id,
     un.id,
@@ -199,5 +199,5 @@ INNER JOIN zeladoria_unidadeatendimento un
 WHERE NOT EXISTS (
     SELECT 1
     FROM zeladoria_solicitacaozeladoria existente
-    WHERE existente.protocolo = s.protocolo
+    WHERE existente.protocolo = s.protocolo::uuid
 );

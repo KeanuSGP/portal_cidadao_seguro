@@ -121,7 +121,7 @@ SELECT
     u.id
 FROM anexos a
 INNER JOIN zeladoria_solicitacaozeladoria s
-    ON s.protocolo = a.protocolo
+    ON s.protocolo = a.protocolo::uuid
 INNER JOIN accounts_usuario u
     ON u.email = a.email
 WHERE NOT EXISTS (

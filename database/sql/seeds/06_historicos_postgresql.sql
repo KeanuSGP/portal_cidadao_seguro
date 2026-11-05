@@ -268,7 +268,7 @@ SELECT
     u.id
 FROM eventos e
 INNER JOIN zeladoria_solicitacaozeladoria s
-    ON s.protocolo = e.protocolo
+    ON s.protocolo = e.protocolo::uuid
 INNER JOIN zeladoria_unidadeatendimento u
     ON u.codigo = e.unidade_codigo
 WHERE NOT EXISTS (

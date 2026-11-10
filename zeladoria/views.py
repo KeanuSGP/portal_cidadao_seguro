@@ -56,6 +56,7 @@ class SolicitacaoViewSet(viewsets.ModelViewSet):
         solicitacao = serializer.save(solicitante=self.request.user)
         registrar_criacao(solicitacao, self.request.user)
 
+    @transaction.atomic
     def partial_update(self, request, *args, **kwargs):
         solicitacao = self.get_object()
         if not (is_admin(request.user) or is_servidor(request.user)):

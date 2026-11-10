@@ -22,6 +22,13 @@ class UnidadeAtendimento(CodigoAutomaticoModel):
         auto_now_add=True,
     )
 
+    servicos = models.ManyToManyField(
+    "catalogo.ServicoCatalogo",
+    through="UnidadeServico",
+    related_name="unidades_atendimento",
+    blank=True
+)
+
     class Meta:
         db_table = "zeladoria_unidadeatendimento"
         ordering = ["nome"]
@@ -295,3 +302,35 @@ class AnexoSolicitacao(models.Model):
 
     def __str__(self):
         return self.nome_original
+
+
+class UnidadeServico(models.Model):
+    unidade = models.ForeignKey(
+        UnidadeAtendimento,
+        on_delete=models.CASCADE,
+        related_name="servicos_vinculados"
+    )
+
+    servico = models.ForeignKey(
+        "catalogo.ServicoCatalogo",
+        on_delete=models.PROTECT,
+        related_name="unidades_vinculadas"
+    )
+
+    prazo_atendimento_dias = models.PositiveIntegerField(
+        null=True,
+        blank=True
+    )
+
+    ativo = models.BooleanField(default=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["unidade", "servico"],
+                name="unique_unidade_servico"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.unidade} - {self.servico}"

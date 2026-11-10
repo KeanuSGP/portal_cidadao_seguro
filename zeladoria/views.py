@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+import re
 
 from .models import UnidadeAtendimento, SolicitacaoZeladoria, HistoricoSolicitacao, AnexoSolicitacao
 from .permissions import PodeConsultarUnidades, PermissaoSolicitacao, is_admin, is_servidor
@@ -45,6 +46,28 @@ class SolicitacaoViewSet(viewsets.ModelViewSet):
         if is_admin(user) or is_servidor(user):
             return qs
         return qs.filter(solicitante=user)
+    
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+
+        prefixo = "respostas_adicionais__"
+
+        for parametro, valor in self.request.query_params.items():
+            if parametro.startswith(prefixo):
+                chave = parametro[len(prefixo):]
+
+                # Aceita somente nomes simples de chaves JSON
+                if not re.fullmatch(r"[a-zA-Z0-9_]+", chave):
+                    raise ValidationError({
+                        "filtro": "Nome de chave JSON inválido."
+                    })
+
+                queryset = queryset.filter(
+                    **{f"respostas_adicionais__{chave}": valor}
+                )
+
+        return queryset
+
 
     def get_serializer_class(self):
         if self.action == "create":

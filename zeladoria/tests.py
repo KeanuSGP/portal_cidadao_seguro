@@ -234,4 +234,50 @@ class SolicitacaoAtomicidadeTestCase(TestCase):
             ).count(),
             historicos_antes
         )
+        
+        
+    def test_filtrar_solicitacoes_por_chave_json(self):
+        payload_alta = self.payload.copy()
+        payload_alta["respostas_adicionais"] = {
+            "gravidade": "alta"
+        }
+
+        payload_baixa = self.payload.copy()
+        payload_baixa["respostas_adicionais"] = {
+            "gravidade": "baixa"
+        }
+
+        payload_baixa["descricao"] = "Buraco de pequena dimensão."
+
+        response_alta = self.client.post(
+            self.url,
+            payload_alta,
+            format="json"
+        )
+
+        response_baixa = self.client.post(
+            self.url,
+            payload_baixa,
+            format="json"
+        )
+
+        self.assertEqual(response_alta.status_code, 201)
+        self.assertEqual(response_baixa.status_code, 201)
+
+        response = self.client.get(
+            self.url,
+            {"respostas_adicionais__gravidade": "alta"}
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        resultados = response.data["results"]
+
+        self.assertEqual(len(resultados), 1)
+
+        self.assertEqual(
+            resultados[0]["respostas_adicionais"]["gravidade"],
+            "alta"
+        )
+
 

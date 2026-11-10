@@ -5,6 +5,7 @@ from django.db import models
 
 from catalogo.mixins import CodigoAutomaticoModel
 from catalogo.models import ServicoCatalogo
+from django.contrib.postgres.indexes import GinIndex
 
 
 class UnidadeAtendimento(CodigoAutomaticoModel):
@@ -166,6 +167,10 @@ class SolicitacaoZeladoria(models.Model):
             models.Index(
                 fields=["unidade_atual", "status"],
                 name="idx_unidade_status",
+            ),
+            GinIndex(
+                fields=["respostas_adicionais"],
+                name="idx_respostas_adicionais_gin",
             ),
         ]
 
